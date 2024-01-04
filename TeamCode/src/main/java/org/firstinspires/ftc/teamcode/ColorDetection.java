@@ -68,7 +68,7 @@ public class ColorDetection extends LinearOpMode
 //        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
 //        // out when the RC activity is in portrait. We do our actual image processing assuming
 //        // landscape orientation, though.
-        camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+//        camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -86,14 +86,18 @@ public class ColorDetection extends LinearOpMode
                  */
             }
         });
-        camera.setPipeline(pipelineBlue);
 
+
+        while (!isStarted() && !isStopRequested()) {
+//            camera.setPipeline(pipelineBlue);
+            telemetry.addData("Analysis", pipelineBlue.getAnalysis());
+            telemetry.update();
+
+        }
         waitForStart();
 
         while (opModeIsActive())
         {
-            telemetry.addData("Analysis", pipelineBlue.getAnalysis());
-            telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
