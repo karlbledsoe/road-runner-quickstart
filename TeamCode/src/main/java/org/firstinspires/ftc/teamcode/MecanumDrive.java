@@ -84,12 +84,12 @@ public final class MecanumDrive {
         // path controller gains
 
         //values for feedbacktest
-        public double axialGain = 2.1;
-        public double lateralGain = -0.2;
-        public double headingGain = 0.0; // shared with turn
+        public double axialGain = 1;
+        public double lateralGain = 1;
+        public double headingGain = 1; // shared with turn
 
         public double axialVelGain = 1;
-        public double lateralVelGain = 11.50;
+        public double lateralVelGain = 1;
         public double headingVelGain = 1.0; // shared with turn
 
         //values for splinetest
