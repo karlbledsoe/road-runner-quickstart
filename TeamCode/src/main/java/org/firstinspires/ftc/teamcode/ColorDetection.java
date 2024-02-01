@@ -21,6 +21,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -43,6 +45,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
  * the sample regions over the first 3 stones.
  */
 @TeleOp
+@Config
 //@Disabled
 public class ColorDetection extends LinearOpMode
 {
@@ -64,6 +67,7 @@ public class ColorDetection extends LinearOpMode
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class,"Webcam 1"), cameraMonitorViewId);
         pipelineBlue = new BlueDeterminationPipeline();
         pipelineRed = new RedDeterminationPipeline();
+        FtcDashboard.getInstance().startCameraStream(camera, 0);
 
 //        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
 //        // out when the RC activity is in portrait. We do our actual image processing assuming
@@ -104,8 +108,12 @@ public class ColorDetection extends LinearOpMode
         }
     }
 
-    public static class BlueDeterminationPipeline extends OpenCvPipeline
-    {
+    public static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(75,690);
+    public static Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(615,675);
+    public static Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1215,740);
+    public static int REGION_WIDTH = 50;
+    public static int REGION_HEIGHT = 50;
+    public static class BlueDeterminationPipeline extends OpenCvPipeline {
         /*
          * An enum to define the skystone position
          */
@@ -125,11 +133,7 @@ public class ColorDetection extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(75,690);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(615,675);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1215,740);
-        static final int REGION_WIDTH = 50;
-        static final int REGION_HEIGHT = 50;
+
 
         /*
          * Points which actually define the sample region rectangles, derived from above values
@@ -371,8 +375,7 @@ public class ColorDetection extends LinearOpMode
             return position;
         }
     }
-    public static class RedDeterminationPipeline extends OpenCvPipeline
-    {
+    public static class RedDeterminationPipeline extends OpenCvPipeline {
         /*
          * An enum to define the skystone position
          */
@@ -388,15 +391,6 @@ public class ColorDetection extends LinearOpMode
          */
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
-
-        /*
-         * The core values which define the location and size of the sample regions
-         */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(75,690);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(615,675);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1215,740);
-        static final int REGION_WIDTH = 50;
-        static final int REGION_HEIGHT = 50;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values

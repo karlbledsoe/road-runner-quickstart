@@ -33,12 +33,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware;
 
 
 /*
@@ -60,15 +55,28 @@ import org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware;
 public class BasicOpMode_Linear extends LinearOpMode {
 
     // Declare OpMode members.
-    public static double ssStartPosition=0.26;
-    public static double ssScorePosition=0.9;
-    public static int slidesUp=100;
-            public static int slidesDown=0;
 
-    public static double planeOn=1;
-    public static double intakePower=8;
-    public static double startingPosPlane=0;
-    public static double firePlane=1;
+    GamepadEx rightTrigger1 = new GamepadEx();
+    GamepadEx leftTrigger1 = new GamepadEx();
+
+    GamepadEx rightBumper1 = new GamepadEx();
+    GamepadEx leftBumper1 = new GamepadEx();
+
+    public static double ssStartPosition = 0.22;
+    public static double ssScorePosition = 0.9;
+    public static int slidesUp = 100;
+    public static int slidesDown = 0;
+
+    public static int planeOn = 1;
+    public static double intakePower = 0.8;
+    public static double startingPosPlane = 0.55;
+    public static double firePlane = 0;
+    boolean planeFire = false;
+    boolean backFront = false;
+    boolean intakeChanged = false;
+    boolean frontSide = true;
+    int reversed = 1;
+    int front = 0;
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -100,15 +108,59 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            robot.leftFront.setPower(-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-            robot.rightFront.setPower(-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
-            robot.leftBack.setPower(-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
-            robot.rightBack.setPower(-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
+            rightTrigger1.updateButton(gamepad1.right_trigger >= 0);
+            leftTrigger1.updateButton(gamepad1.right_trigger >= 0);
+            rightBumper1.updateButton(gamepad1.right_bumper);
+            leftBumper1.updateButton(gamepad1.left_bumper);
+
+
+            if (gamepad1.right_trigger > 0.1 && reversed != 1 && !intakeChanged) {
+                reversed = 1;
+                robot.intake.setPower(intakePower);
+                intakeChanged = true;
+            } else if (gamepad1.right_trigger > 0.1 && reversed == 1 && !intakeChanged) {
+                reversed = 0;
+                robot.intake.setPower(0);
+                intakeChanged = true;
+            } else if (gamepad1.left_trigger > 0.1 && reversed != 2 && !intakeChanged) {
+                reversed = 2;
+                robot.intake.setPower(-1);
+                intakeChanged = true;
+            } else if (gamepad1.left_trigger > 0.1 && reversed == 2 && !intakeChanged) {
+                reversed = 0;
+                robot.intake.setPower(0);
+                intakeChanged = true;
+            }
+            if (gamepad1.right_trigger < 0.1 && gamepad1.left_trigger<0.1) {
+                intakeChanged = false;
+            }
+
+
+            if (rightBumper1.isPressed()) {
+                frontSide=!frontSide;
+            }
+            if (frontSide) {
+                front = 1;
+            } else {
+                front = -1;
+            }
+
+
+            if (leftBumper1.isToggled()) {
+                robot.leftFront.setPower(front * (-gamepad1.left_stick_y + gamepad1.left_stick_x) + gamepad1.right_stick_x);
+                robot.rightFront.setPower(front * (-gamepad1.left_stick_y - gamepad1.left_stick_x) - gamepad1.right_stick_x);
+                robot.leftBack.setPower(front * (-gamepad1.left_stick_y - gamepad1.left_stick_x) + gamepad1.right_stick_x);
+                robot.rightBack.setPower(front * (-gamepad1.left_stick_y + gamepad1.left_stick_x) - gamepad1.right_stick_x);
+            } else {
+                robot.leftFront.setPower ((front * (-gamepad1.left_stick_y + gamepad1.left_stick_x) + gamepad1.right_stick_x) / 2);
+                robot.rightFront.setPower((front * (-gamepad1.left_stick_y - gamepad1.left_stick_x) - gamepad1.right_stick_x) / 2);
+                robot.leftBack.setPower  ((front * (-gamepad1.left_stick_y - gamepad1.left_stick_x) + gamepad1.right_stick_x) / 2);
+                robot.rightBack.setPower ((front * (-gamepad1.left_stick_y + gamepad1.left_stick_x) - gamepad1.right_stick_x) / 2);
+            }
             // Setup a variable for each drive wheel to save power level for telemetry
             double forward = gamepad1.left_stick_y;
 
-            // Intake button
-            robot.intake.setPower((gamepad1.right_trigger - gamepad1.left_trigger) * intakePower);
+
             if (gamepad2.dpad_up) {
 //                robot.leftSlide.setTargetPosition(slidesUp);
 //                robot.rightSlide.setTargetPosition(slidesUp);
@@ -127,7 +179,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 robot.rightSlide.setPower(0);
             }
             if (gamepad2.a) {
-                robot.scoringServo.setPosition(ssScorePosition-0.1);
+                robot.scoringServo.setPosition(ssScorePosition - 0.1);
                 sleep(500);
                 robot.scoringServo.setPosition(ssScorePosition);
             } else {
@@ -139,19 +191,15 @@ public class BasicOpMode_Linear extends LinearOpMode {
 //            } else {
 //              //robot.shooterServo.setPosition(planeStart);
 //            }
-            if(gamepad2.y){
-                planeOn++;
-
+            if (gamepad2.y) {
+                planeFire = true;
             }
-            if(planeOn%2==0){
-                robot.plane.setVelocity(2000);
-            }else{
-                robot.plane.setVelocity(0);
+            if (gamepad2.x) {
+                planeFire = false;
             }
-            if(gamepad2.y){
+            if (planeFire) {
                 robot.planeS.setPosition(firePlane);
-            }
-            else{
+            } else {
                 robot.planeS.setPosition(startingPosPlane);
             }
 

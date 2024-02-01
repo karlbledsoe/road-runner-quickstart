@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -45,18 +47,16 @@ public class BasicAuto extends LinearOpMode {
     OpenCvCamera camera;
     int randomizationPosition = 0;
 
-    String team = "Blue";
+//    String team = "Blue";
 
-    boolean confirm = false;
-    String position = "Back";
-    String parking = "Right";
+//    String position = "Back";
+//    String parking = "Right";
 
 
     int xMod = -1;
 
     int yMod = -1;
     int hMod = 180;
-    double turnconstant = Math.toRadians(90);
 
     Rotation2d turnConstant = new Rotation2d(1, 1);
 //    int redVBlue() {
@@ -67,33 +67,69 @@ public class BasicAuto extends LinearOpMode {
      * 1==red
      */
     Pose2d finalStartingPos = new Pose2d(0, 0, 0);
-    Pose2d startingPosFB = new Pose2d(13, 59.666, Math.toRadians(90));
-    Pose2d startingPosBB = new Pose2d(-13, 59.666, Math.toRadians(90));
-    Pose2d startingPosFR = new Pose2d(13, -59.666, Math.toRadians(-90));
-    Pose2d startingPosBR = new Pose2d(-13, -59.666, Math.toRadians(-90));
+    Pose2d startingPosBB = new Pose2d(13, 59.666, Math.toRadians(90));
+    Pose2d startingPosFB = new Pose2d(-37, 59.666, Math.toRadians(90));
+    Pose2d startingPosBR = new Pose2d(13, -59.666, Math.toRadians(-90));
+    Pose2d startingPosFR = new Pose2d(-37, -59.666, Math.toRadians(-90));
     Pose2d redFrontScore = new Pose2d(12.134397, -33.48671, Math.toRadians(-90));
-    Pose2d redFrontScoreRight = new Pose2d(19.134397-0.5, -35.48671-0.5, Math.toRadians(-90));
+    Pose2d redFrontScoreRight = new Pose2d(19.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(-90));
 
     Pose2d redFrontScoreMid = new Pose2d(12.134397, -35.48671, Math.toRadians(-90));
 
     Pose2d finalScoreLeft = new Pose2d(12.134397, -33.48671, Math.toRadians(-90));
-    Pose2d finalScoreRight = new Pose2d(19.134397-0.5, -35.48671-0.5, Math.toRadians(-90));
+    Pose2d finalScoreRight = new Pose2d(19.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(-90));
 
     Pose2d finalScoreMid = new Pose2d(12.134397, -35.48671, Math.toRadians(-90));
     Pose2d parkingCornerRed = new Pose2d(60, -59.666, Math.toRadians(-90));
     Pose2d parkingCornerBlue = new Pose2d(60, 59.666, Math.toRadians(-90));
 
-
+    Vector2d initialOnset = new Vector2d(16, 50);
     Pose2d finalParking = new Pose2d(60, -59.666, Math.toRadians(-90));
 
+    GamepadEx a1 = new GamepadEx();
+    GamepadEx b1 = new GamepadEx();
+    GamepadEx x1 = new GamepadEx();
+    GamepadEx y1 = new GamepadEx();
 
 
+    boolean isBlue = false;
+    boolean isFront = false;
+    boolean confirm = false;
+    boolean parkMiddle = false;
+    /**
+     * 0==Red
+     * 1==Blue
+     */
+//    int Team() {
+//        return team % 2;
+//    }
 
 
     /**
      * 0==Back
      * 1==Front
      */
+//    int Position(){
+//        return position%2;
+//    }
+
+    /**
+     * 0==Confirm
+     * 1==Uncomfirmed
+     */
+//    int Confirm(){
+//        return confirm%2;
+//    }
+
+    /**
+     * 0==Middle
+     * 1==Corner
+     */
+//    int Parking(){
+//        return confirm%2;
+//    }
+
+
 //    int backVFront() {
 //        return position % 2;
 //    }
@@ -120,6 +156,8 @@ public class BasicAuto extends LinearOpMode {
 
         pipelineBlue = new ColorDetection.BlueDeterminationPipeline();
         pipelineRed = new ColorDetection.RedDeterminationPipeline();
+        FtcDashboard.getInstance().startCameraStream(camera, 0);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 //        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
 //        // out when the RC activity is in portrait. We do our actual image processing assuming
@@ -143,91 +181,122 @@ public class BasicAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         // waitForStart();
         while (!isStarted() && !isStopRequested()) {
-            if (gamepad1.dpad_down) {
-                confirm = true;
+            y1.updateButton(gamepad1.y);
+            if (y1.isPressed()) {
+                confirm = !confirm;
             }
-            if (gamepad1.dpad_up) {
-                confirm = false;
-            }
-            if (gamepad1.b) {
-                team = "Red";
-            }
-            if (gamepad1.x) {
-                team = "Blue";
-            }
-            if (gamepad1.y) {
-                position = "Front";
-            }
-            if (gamepad1.a) {
-                position = "Back";
-            }
-            if (gamepad1.dpad_right) {
-                parking = "Corner";
-            }
-            if (gamepad1.dpad_left) {
-                parking = "Middle";
-            }
-            telemetry.addData("Team", team);
-            telemetry.addData("Unconfirmed", "");
-            telemetry.addData("Position", position);
-            telemetry.addData("Parking", parking);
-
-            telemetry.update();
+//            if (team) {
+//                telemetry.addData("Team", "Blue");
+//            } else {
+//                telemetry.addData("Team", "Red");
+//            }
+//            if (Position() == 0) {
+//                telemetry.addData("Position", "Back");
+//            } else {
+//                telemetry.addData("Position", "Front");
+//            }
+//            if (Parking() == 0) {
+//                telemetry.addData("Park", "Middle");
+//            } else {
+//                telemetry.addData("Park", "Corner");
+//            }
+//            if(Confirm()==1) {
+//                telemetry.addData("Confirmed", false);
+//            }
             if (confirm) {
-                if (team == "Blue") {
+                telemetry.addData("Confirmed", true);
+                if (isBlue) {
                     camera.setPipeline(pipelineBlue);
                     placement = pipelineBlue.getAnalysis();
-                }
-                if (team == "Red") {
+                } else {
                     camera.setPipeline(pipelineRed);
                     placement = pipelineRed.getAnalysis();
                 }
                 telemetry.addData("Analysis", placement);
-                telemetry.addData("Team", team);
-                telemetry.addData("Confirmed", "");
-                telemetry.addData("Position", position);
-                telemetry.addData("Parking", parking);
-                telemetry.update();
+            } else {
+                a1.updateButton(gamepad1.a);
+                b1.updateButton(gamepad1.b);
+                x1.updateButton(gamepad1.x);
+                if (a1.isPressed()) {
+                    isBlue = !isBlue;
+                }
+                if (b1.isPressed()) {
+                    isFront = !isFront;
+                }
+                if (x1.isPressed()) {
+                    parkMiddle = !parkMiddle;
+                }
+
             }
+            if (isBlue) {
+                telemetry.addData("Team", "Blue");
+
+            } else {
+                telemetry.addData("Team", "Red");
+
+            }
+            if (isFront) {
+                telemetry.addData("Position", "Front");
+            } else {
+                telemetry.addData("Position", "Back");
+            }
+            if (parkMiddle) {
+                telemetry.addData("Parking", "Middle");
+            } else {
+                telemetry.addData("Parking", "Corner");
+            }
+
+            telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
         }
-        if (team.equals("Blue") && position.equals("Back")) {
-            finalStartingPos = startingPosBB;
+        if (isBlue && isFront) {
+            finalStartingPos = new Pose2d(-37, 59.666, Math.toRadians(90));
             xMod = -1;
             yMod = 1;
             hMod = 0;
-             finalScoreLeft = new Pose2d(-12.134397, 33.48671, Math.toRadians(90));
-             finalScoreRight = new Pose2d(-12.134397-0.5, 35.48671-0.5, Math.toRadians(90));
-             finalScoreMid = new Pose2d(-12.134397, 35.48671, Math.toRadians(90));
-        } else if (team.equals("Blue") && position.equals("Front")) {
-            finalStartingPos = startingPosFB;
+//            finalScoreLeft = new Pose2d(-37.134397, 33.48671, Math.toRadians(90));
+//            finalScoreRight = new Pose2d(-37.134397 - 0.5, 35.48671 - 0.5, Math.toRadians(90));
+//            finalScoreMid = new Pose2d(-37.134397, 35.48671, Math.toRadians(90));
+            initialOnset =new Vector2d(-16,50);
+            finalScoreLeft = new Pose2d(-21.134397, 35.48671, Math.toRadians(90));
+            finalScoreRight = new Pose2d(-2.134397 - 0.5, 35.48671 - 0.5, Math.toRadians(90));
+            finalScoreMid = new Pose2d(-19.134397, 25.48671, Math.toRadians(0));
+        } else if (isBlue && !isFront) {
+
+            finalStartingPos = new Pose2d(13, 59.666, Math.toRadians(90));
+            ;
             xMod = 1;
             yMod = 1;
             hMod = 0;
             finalParking = parkingCornerBlue;
-             finalScoreLeft = new Pose2d(12.134397, 33.48671, Math.toRadians(90));
-             finalScoreRight = new Pose2d(19.134397-0.5, 35.48671-0.5, Math.toRadians(90));
-             finalScoreMid = new Pose2d(12.134397, 35.48671, Math.toRadians(90));
-        } else if (team.equals("Red") && position.equals("Front")) {
-            finalStartingPos = startingPosFR;
-            xMod = 1;
+            initialOnset = new Vector2d(16, 50);
+            finalScoreLeft = new Pose2d(25.134397-0.5, 35.48671, Math.toRadians(90));
+            finalScoreRight = new Pose2d(2.134397 - 0.5, 35.48671 - 0.5, Math.toRadians(90));
+            finalScoreMid = new Pose2d(19.134397, 25.48671, Math.toRadians(0));
+        } else if (!isBlue && !isFront) {
+
+            finalStartingPos = new Pose2d(13, 59.666, Math.toRadians(-90));
+            xMod=1;
             yMod = -1;
             hMod = 180;
             finalParking = parkingCornerRed;
+            initialOnset =new Vector2d(16,-50);
+            finalScoreLeft = new Pose2d(21.134397, -35.48671, Math.toRadians(90));
+            finalScoreRight = new Pose2d(2.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(90));
+            finalScoreMid = new Pose2d(19.134397, -25.48671, Math.toRadians(0));
+        } else if (!isBlue && isFront) {
 
-             finalScoreLeft = new Pose2d(12.134397, -33.48671, Math.toRadians(-90));
-             finalScoreRight = new Pose2d(19.134397-0.5, -35.48671-0.5, Math.toRadians(-90));
-             finalScoreMid = new Pose2d(12.134397, -35.48671, Math.toRadians(-90));
-        } else if (team.equals("Red") && position.equals("Back")) {
-            finalStartingPos = startingPosBR;
+            finalStartingPos = new Pose2d(-37, -59.666, Math.toRadians(-90));
+            ;
             xMod = -1;
             yMod = -1;
             hMod = 180;
-             finalScoreLeft = new Pose2d(-12.134397, -33.48671, Math.toRadians(-90));
-             finalScoreRight = new Pose2d(-9.134397-0.5, -35.48671-0.5, Math.toRadians(-90));
-             finalScoreMid = new Pose2d(-12.134397, -35.48671, Math.toRadians(-90));
+            initialOnset =new Vector2d(-16,50);
+            finalScoreLeft = new Pose2d(-21.134397, -35.48671, Math.toRadians(90));
+            finalScoreRight = new Pose2d(-2.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(90));
+            finalScoreMid = new Pose2d(-19.134397, -25.48671, Math.toRadians(0));
         }
         if (placement == ColorDetection.BlueDeterminationPipeline.TeamElementPosition.LEFT) {
             randomizationPosition = -1;
@@ -255,18 +324,16 @@ public class BasicAuto extends LinearOpMode {
 //                  .strafeToLinearHeading(new Vector2d(13 * xMod, 37.666 * yMod), Math.toRadians(-90 * -yMod))
 //                  .build()
 //          );
+
+
             drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(finalScoreLeft.position, finalScoreLeft.heading.plus(0))
-
-                    .build()
-            );
-
-          drive.updatePoseEstimate();
-            Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(finalScoreLeft.position, finalScoreLeft.heading.plus(turnconstant))
-                    .build()
-            );
+                    .strafeToLinearHeading(initialOnset,Math.toRadians(90))
+                    .setReversed(true)
+                    .splineToSplineHeading(finalScoreLeft, finalScoreLeft.heading.plus(Math.PI))
+                    .splineToConstantHeading(finalScoreLeft.position, finalScoreLeft.heading.plus(Math.PI))
+                    .build());
+            ;
 //          Actions.runBlocking(drive.actionBuilder(drive.pose)
 //                  .strafeToLinearHeading(new Vector2d(16 * xMod, 33.666 * yMod), Math.toRadians(180 + hMod))
 //                  .build()
@@ -277,15 +344,13 @@ public class BasicAuto extends LinearOpMode {
 //                  .build()
 //          );
 //          drive.updatePoseEstimate();
+            drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(finalScoreLeft.position, finalScoreLeft.heading.plus(0))
-                    .build()
-            );
-          drive.updatePoseEstimate();
-            Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(finalScoreRight.position, finalScoreLeft.heading.plus(-turnconstant))
-                    .build()
-            );
+                    .strafeToLinearHeading(initialOnset,Math.toRadians(90))
+                    .setReversed(true)
+                    .splineToSplineHeading(finalScoreRight, finalScoreRight.heading.plus(Math.PI))
+                    .splineToConstantHeading(finalScoreRight.position, finalScoreRight.heading.plus(Math.PI))
+                    .build());
 //          Actions.runBlocking(drive.actionBuilder(drive.pose)
 //                  .strafeToLinearHeading(new Vector2d(16 * xMod, 33.666 * yMod), Math.toRadians(0 + hMod))
 //                  .build()
@@ -297,9 +362,11 @@ public class BasicAuto extends LinearOpMode {
 //          );
 //          drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(finalScoreMid.position, finalScoreLeft.heading.plus(0))
-                    .build()
-            );
+                    .strafeToLinearHeading(initialOnset,Math.toRadians(90))
+                    .setReversed(true)
+                    .splineToSplineHeading(finalScoreMid, finalScoreMid.heading.plus(Math.PI))
+                    .splineToConstantHeading(finalScoreMid.position, finalScoreMid.heading.plus(Math.PI))
+                    .build());
 //          drive.updatePoseEstimate();
         }
         drive.updatePoseEstimate();
@@ -308,7 +375,7 @@ public class BasicAuto extends LinearOpMode {
 //                .build()
 //        );
         drive.intake.setPower(0.5);
-        waitEx(1000);
+        waitEx(2000);
         drive.intake.setPower(0);
         drive.updatePoseEstimate();
         Actions.runBlocking(drive.actionBuilder(drive.pose)
@@ -316,7 +383,7 @@ public class BasicAuto extends LinearOpMode {
                 .build()
         );
         drive.updatePoseEstimate();
-        if(parking == "Corner" && position == "Front"){
+        if (!parkMiddle && !isFront) {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(finalParking.position, finalStartingPos.heading)
                     .build()
