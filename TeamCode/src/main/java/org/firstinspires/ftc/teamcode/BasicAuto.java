@@ -18,45 +18,23 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.concurrent.TimeUnit;
 
-/*
- * This OpMode illustrates the concept of driving a path based on time.
- * The code is structured as a LinearOpMode
- *
- * The code assumes that you do NOT have encoders on the wheels,
- *   otherwise you would use: RobotAutoDriveByEncoder;
- *
- *   The desired path in this example is:
- *   - Drive forward for 3 seconds
- *   - Spin right for 1.3 seconds
- *   - Drive Backward for 1 Second
- *
- *  The code is written in a simple form with no optimizations.
- *  However, there are several ways that this type of sequence could be streamlined,
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
-
 @Autonomous(preselectTeleOp = "BasicOpMode_Linear")
 public class BasicAuto extends LinearOpMode {
-
     public ColorDetection.BlueDeterminationPipeline pipelineBlue;
     public ColorDetection.RedDeterminationPipeline pipelineRed;
     private ElapsedTime timer = new ElapsedTime();
     Object placement;
     OpenCvCamera camera;
     int randomizationPosition = 0;
-
+    /**
 //    String team = "Blue";
-
 //    String position = "Back";
 //    String parking = "Right";
-
-
+     */
     int xMod = -1;
-
     int yMod = -1;
     int hMod = 180;
+
 
     Rotation2d turnConstant = new Rotation2d(1, 1);
 //    int redVBlue() {
@@ -67,6 +45,7 @@ public class BasicAuto extends LinearOpMode {
      * 1==red
      */
     Pose2d finalStartingPos = new Pose2d(0, 0, 0);
+    /**
     Pose2d startingPosBB = new Pose2d(13, 59.666, Math.toRadians(90));
     Pose2d startingPosFB = new Pose2d(-37, 59.666, Math.toRadians(90));
     Pose2d startingPosBR = new Pose2d(13, -59.666, Math.toRadians(-90));
@@ -75,7 +54,7 @@ public class BasicAuto extends LinearOpMode {
     Pose2d redFrontScoreRight = new Pose2d(19.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(-90));
 
     Pose2d redFrontScoreMid = new Pose2d(12.134397, -35.48671, Math.toRadians(-90));
-
+*/
     Pose2d finalScoreLeft = new Pose2d(12.134397, -33.48671, Math.toRadians(-90));
     Pose2d finalScoreRight = new Pose2d(19.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(-90));
 
@@ -85,54 +64,54 @@ public class BasicAuto extends LinearOpMode {
 
     Vector2d initialOnset = new Vector2d(16, 50);
     Pose2d finalParking = new Pose2d(60, -59.666, Math.toRadians(-90));
-
+    Pose2d     finalScoreLeftt = new Pose2d(-24.134397, 35.48671, Math.toRadians(90));
+    Pose2d     pixelScoreSetup = new Pose2d(48, 10, Math.toRadians(90));
+    Pose2d     pixelScore = new Pose2d(48, 24, Math.toRadians(0));
     GamepadEx a1 = new GamepadEx();
     GamepadEx b1 = new GamepadEx();
     GamepadEx x1 = new GamepadEx();
     GamepadEx y1 = new GamepadEx();
-
-
     boolean isBlue = false;
     boolean isFront = false;
     boolean confirm = false;
     boolean parkMiddle = false;
-    /**
-     * 0==Red
-     * 1==Blue
-     */
-//    int Team() {
-//        return team % 2;
-//    }
-
-
-    /**
-     * 0==Back
-     * 1==Front
-     */
-//    int Position(){
-//        return position%2;
-//    }
-
-    /**
-     * 0==Confirm
-     * 1==Uncomfirmed
-     */
-//    int Confirm(){
-//        return confirm%2;
-//    }
-
-    /**
-     * 0==Middle
-     * 1==Corner
-     */
-//    int Parking(){
-//        return confirm%2;
-//    }
-
-
-//    int backVFront() {
-//        return position % 2;
-//    }
+//    /**
+//     * 0==Red
+//     * 1==Blue
+//     */
+////    int Team() {
+////        return team % 2;
+////    }
+//
+//
+//    /**
+//     * 0==Back
+//     * 1==Front
+//     */
+////    int Position(){
+////        return position%2;
+////    }
+//
+//    /**
+//     * 0==Confirm
+//     * 1==Uncomfirmed
+//     */
+////    int Confirm(){
+////        return confirm%2;
+////    }
+//
+//    /**
+//     * 0==Middle
+//     * 1==Corner
+//     */
+////    int Parking(){
+////        return confirm%2;
+////    }
+//
+//
+////    int backVFront() {
+////        return position % 2;
+////    }
     @Override
     public void runOpMode() {
 
@@ -158,13 +137,10 @@ public class BasicAuto extends LinearOpMode {
         pipelineRed = new ColorDetection.RedDeterminationPipeline();
         FtcDashboard.getInstance().startCameraStream(camera, 0);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
 //        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
 //        // out when the RC activity is in portrait. We do our actual image processing assuming
 //        // landscape orientation, though.
 //        camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
-
-
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -230,10 +206,8 @@ public class BasicAuto extends LinearOpMode {
             }
             if (isBlue) {
                 telemetry.addData("Team", "Blue");
-
             } else {
                 telemetry.addData("Team", "Red");
-
             }
             if (isFront) {
                 telemetry.addData("Position", "Front");
@@ -251,6 +225,8 @@ public class BasicAuto extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
         }
+
+
         if (isBlue && isFront) {
             finalStartingPos = new Pose2d(-37, 59.666, Math.toRadians(90));
             xMod = -1;
@@ -259,49 +235,51 @@ public class BasicAuto extends LinearOpMode {
 //            finalScoreLeft = new Pose2d(-37.134397, 33.48671, Math.toRadians(90));
 //            finalScoreRight = new Pose2d(-37.134397 - 0.5, 35.48671 - 0.5, Math.toRadians(90));
 //            finalScoreMid = new Pose2d(-37.134397, 35.48671, Math.toRadians(90));
-            initialOnset =new Vector2d(-16,50);
-            finalScoreLeft = new Pose2d(-21.134397, 35.48671, Math.toRadians(90));
-            finalScoreRight = new Pose2d(-2.134397 - 0.5, 35.48671 - 0.5, Math.toRadians(90));
-            finalScoreMid = new Pose2d(-19.134397, 25.48671, Math.toRadians(0));
-        } else if (isBlue && !isFront) {
-
+            initialOnset = new Vector2d(-49,50);
+            finalScoreLeft = new Pose2d(-28.134397, 35.48671, Math.toRadians(90));
+            finalScoreRight = new Pose2d(-26.134397, 35.48671 - 0.5, Math.toRadians(90));
+            finalScoreMid = new Pose2d(-43.134397, 25.48671, Math.toRadians(0));
+        }
+        else if (!isBlue && isFront) {
+            finalStartingPos = new Pose2d(-37, -59.666, Math.toRadians(-90));
+            xMod = -1;
+            yMod = -1;
+            hMod = 180;
+            initialOnset = new Vector2d(-49, 50);
+            finalScoreLeft = new Pose2d(-25.134397+0.5, -35.48671, Math.toRadians(90));
+            finalScoreRight = new Pose2d(-26.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(90));
+            finalScoreMid = new Pose2d(-33.134397, -25.48671, Math.toRadians(0));
+        }
+        else if (isBlue && !isFront) {
             finalStartingPos = new Pose2d(13, 59.666, Math.toRadians(90));
-            ;
             xMod = 1;
             yMod = 1;
             hMod = 0;
             finalParking = parkingCornerBlue;
-            initialOnset = new Vector2d(16, 50);
-            finalScoreLeft = new Pose2d(25.134397-0.5, 35.48671, Math.toRadians(90));
+            initialOnset = new Vector2d(25, 50);
+            finalScoreLeft = new Pose2d(25.134397 - 0.5, 35.48671, Math.toRadians(90));
             finalScoreRight = new Pose2d(2.134397 - 0.5, 35.48671 - 0.5, Math.toRadians(90));
             finalScoreMid = new Pose2d(19.134397, 25.48671, Math.toRadians(0));
-        } else if (!isBlue && !isFront) {
+        }
+        else if (!isBlue && !isFront) {
 
             finalStartingPos = new Pose2d(13, 59.666, Math.toRadians(-90));
-            xMod=1;
+            xMod = 1;
             yMod = -1;
             hMod = 180;
             finalParking = parkingCornerRed;
-            initialOnset =new Vector2d(16,-50);
-            finalScoreLeft = new Pose2d(21.134397, -35.48671, Math.toRadians(90));
-            finalScoreRight = new Pose2d(2.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(90));
+            initialOnset = new Vector2d(25, -50);
+            finalScoreLeft = new Pose2d(2 - 0.5, -35.48671, Math.toRadians(-90));
+            finalScoreRight = new Pose2d(25.134397 - 0.5, -35.48671, Math.toRadians(-90));
             finalScoreMid = new Pose2d(19.134397, -25.48671, Math.toRadians(0));
-        } else if (!isBlue && isFront) {
-
-            finalStartingPos = new Pose2d(-37, -59.666, Math.toRadians(-90));
-            ;
-            xMod = -1;
-            yMod = -1;
-            hMod = 180;
-            initialOnset =new Vector2d(-16,50);
-            finalScoreLeft = new Pose2d(-21.134397, -35.48671, Math.toRadians(90));
-            finalScoreRight = new Pose2d(-2.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(90));
-            finalScoreMid = new Pose2d(-19.134397, -25.48671, Math.toRadians(0));
         }
+
+
         if (placement == ColorDetection.BlueDeterminationPipeline.TeamElementPosition.LEFT) {
-            randomizationPosition = -1;
-        } else if (placement == ColorDetection.BlueDeterminationPipeline.TeamElementPosition.RIGHT) {
             randomizationPosition = 1;
+        }
+        else if (placement == ColorDetection.BlueDeterminationPipeline.TeamElementPosition.RIGHT) {
+            randomizationPosition = -1;
         }
         if (placement == ColorDetection.RedDeterminationPipeline.TeamElementPosition.LEFT) {
             randomizationPosition = -1;
@@ -319,21 +297,21 @@ public class BasicAuto extends LinearOpMode {
 //        telemetry.addData("Heading",drive.pose.heading);
 //        telemetry.update();
 //        waitEx(1000000);
+        if (randomizationPosition == -1) {}
+        else if (randomizationPosition == 1) {}
+
         if (randomizationPosition == -1) {
 //          Actions.runBlocking(drive.actionBuilder(drive.pose)
 //                  .strafeToLinearHeading(new Vector2d(13 * xMod, 37.666 * yMod), Math.toRadians(-90 * -yMod))
 //                  .build()
 //          );
-
-
             drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(initialOnset,Math.toRadians(90))
+                    .strafeToLinearHeading(initialOnset, Math.toRadians(90))
                     .setReversed(true)
-                    .splineToSplineHeading(finalScoreLeft, finalScoreLeft.heading.plus(Math.PI))
-                    .splineToConstantHeading(finalScoreLeft.position, finalScoreLeft.heading.plus(Math.PI))
+//                    .splineToSplineHeading(finalScoreLeft, finalScoreLeft.heading.plus(Math.PI))
+                    .splineToConstantHeading(finalScoreLeft.position, finalScoreLeft.heading.plus(Math.PI/2))
                     .build());
-            ;
 //          Actions.runBlocking(drive.actionBuilder(drive.pose)
 //                  .strafeToLinearHeading(new Vector2d(16 * xMod, 33.666 * yMod), Math.toRadians(180 + hMod))
 //                  .build()
@@ -344,25 +322,50 @@ public class BasicAuto extends LinearOpMode {
 //                  .build()
 //          );
 //          drive.updatePoseEstimate();
+            Actions.runBlocking(drive.actionBuilder(drive.pose)
+
+                    .strafeToLinearHeading(new Vector2d(-49,50), Math.toRadians(90))
+                    .setReversed(true)
+//                .splineToSplineHeading(finalScoreLeft, finalScoreLeft.heading.plus(Math.PI))
+                    .splineToConstantHeading(finalScoreLeftt.position, finalScoreLeftt.heading.plus(Math.PI/-2))
+                            .build());
+            drive.updatePoseEstimate();
+            drive.intake.setPower(0.5);
+            waitEx(2000);
+            drive.intake.setPower(0);
             drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(initialOnset,Math.toRadians(90))
-                    .setReversed(true)
-                    .splineToSplineHeading(finalScoreRight, finalScoreRight.heading.plus(Math.PI))
-                    .splineToConstantHeading(finalScoreRight.position, finalScoreRight.heading.plus(Math.PI))
+                            .splineToConstantHeading(new Vector2d(-49,25), finalScoreLeft.heading.plus(0))
+//                    .splineToConstantHeading(finalScoreLeftt.position.plus(new Vector2d(0,-25)), finalScoreLeftt.heading.plus(Math.PI/-2))
+                    //.splineToSplineHeading(new Pose2d(finalScoreLeftt.position.plus(new Vector2d(0,-25)),Math.toRadians(0)), Math.toRadians(0)),Math.toRadians(-90))
+                    .splineToConstantHeading(pixelScoreSetup.position, pixelScoreSetup.heading.plus(Math.PI/-2))
+                    .splineToConstantHeading(pixelScore.position, pixelScore.heading.plus(Math.PI/-2))
+                    .splineToConstantHeading(pixelScore.position.plus(new Vector2d(4,0)), pixelScore.heading.plus(Math.PI/-2))
+                            .build());
+                    drive.updatePoseEstimate();
+                    drive.leftSlide.setTargetPosition(500);
+            drive.leftSlide.setTargetPosition(500);
+            drive.scoringServo.setPosition(0.9);
+            waitEx(2000);
+            drive.intake.setPower(0.22);
+            drive.updatePoseEstimate();
+            Actions.runBlocking(drive.actionBuilder(drive.pose)
+                    .splineToConstantHeading(pixelScore.position.plus(new Vector2d(0,-10)), pixelScore.heading.plus(Math.PI/-2))
+                    .splineToConstantHeading(pixelScore.position.plus(new Vector2d(10,-15)), pixelScore.heading.plus(Math.PI/-2))
+
                     .build());
 //          Actions.runBlocking(drive.actionBuilder(drive.pose)
 //                  .strafeToLinearHeading(new Vector2d(16 * xMod, 33.666 * yMod), Math.toRadians(0 + hMod))
 //                  .build()
 //          );
-        } else {
+        }else {
 //          Actions.runBlocking(drive.actionBuilder(drive.pose)
 //                  .strafeToLinearHeading(new Vector2d(13 * xMod, 32.666 * yMod), Math.toRadians(-90*-yMod))
 //                  .build()
 //          );
 //          drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(initialOnset,Math.toRadians(90))
+                    .strafeToLinearHeading(initialOnset, Math.toRadians(90))
                     .setReversed(true)
                     .splineToSplineHeading(finalScoreMid, finalScoreMid.heading.plus(Math.PI))
                     .splineToConstantHeading(finalScoreMid.position, finalScoreMid.heading.plus(Math.PI))
@@ -417,7 +420,6 @@ public class BasicAuto extends LinearOpMode {
 //        telemetry.addData("Path", "Complete");
 //        telemetry.update();
 //        waitEx(100000);
-
     }
 
     private void waitEx(double milliseconds) {
@@ -463,4 +465,6 @@ public class BasicAuto extends LinearOpMode {
         drive.leftBack.setPower(leftBackPower);
         drive.rightBack.setPower(rightBackPower);
     }
+
+
 }
