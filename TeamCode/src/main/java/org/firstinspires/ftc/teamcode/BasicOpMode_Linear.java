@@ -212,6 +212,13 @@ public class BasicOpMode_Linear extends LinearOpMode {
             telemetry.addData("leftstickY", gamepad1.left_stick_y);
             telemetry.addData("leftstickX", gamepad1.left_stick_x);
             telemetry.addData("rightstickX", gamepad1.right_stick_x);
+            telemetry.addData("rightstickX", gamepad1.right_stick_x);
+            telemetry.addData("rightSlide", robot.rightSlide.getTargetPosition());
+            telemetry.addData("leftSlide", robot.leftSlide.getTargetPosition());
+            telemetry.update();
+
+
+
             telemetry.update();
         }
     }
