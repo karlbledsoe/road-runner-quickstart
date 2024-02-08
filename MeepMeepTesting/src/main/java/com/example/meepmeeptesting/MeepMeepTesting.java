@@ -24,7 +24,7 @@ public class MeepMeepTesting {
 
 
 
-                .setStartPose(new Pose2d(-37, -59.666, Math.toRadians(-90)))
+                .setStartPose(new Pose2d(13, 59.666, Math.toRadians(-90)))
 
                 .build();
 

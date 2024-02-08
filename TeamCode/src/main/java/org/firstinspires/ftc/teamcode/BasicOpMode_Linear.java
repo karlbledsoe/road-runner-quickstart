@@ -164,14 +164,14 @@ public class BasicOpMode_Linear extends LinearOpMode {
             if (gamepad2.dpad_up) {
 //                robot.leftSlide.setTargetPosition(slidesUp);
 //                robot.rightSlide.setTargetPosition(slidesUp);
-                robot.leftSlide.setPower(1);
-                robot.rightSlide.setPower(1);
+                robot.leftSlide.setPower(500);
+                robot.rightSlide.setTargetPosition(500);
 
             } else if (gamepad2.dpad_down) {
 //                robot.leftSlide.setTargetPosition(slidesDown);
 //                robot.rightSlide.setTargetPosition(slidesDown);
-                robot.leftSlide.setPower(-1);
-                robot.rightSlide.setPower(-1);
+                robot.leftSlide.setTargetPosition(-500);
+                robot.rightSlide.setTargetPosition(-500);
             } else {
 //                robot.leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                robot.rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
