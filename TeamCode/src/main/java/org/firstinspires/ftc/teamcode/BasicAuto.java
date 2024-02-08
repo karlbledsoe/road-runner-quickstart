@@ -234,11 +234,10 @@ public class BasicAuto extends LinearOpMode {
             yMod = 1;
             hMod = 0;
 
-            initialOnset = new Vector2d(-49,50);
-            Vector2d     pixelScoreSetup = new Vector2d(48,12);
-            Vector2d     hangingDoorPrep = new Vector2d(-40,12);
-            Vector2d lineBack = new Vector2d(-40,38);
-            finalScoreLeft = new Pose2d(-28.134397, 35.48671, Math.toRadians(90));
+            Vector2d initialOnset = new Vector2d(-49, -50);
+            Pose2d     finalScoreLeft = new Pose2d(-25.134397, -35.48671, Math.toRadians(90));
+            Vector2d     pixelScoreSetup = new Vector2d(48,-12);
+            Vector2d     hangingDoorPrep = new Vector2d(-40,-12);
             finalScoreRight = new Pose2d(-26.134397, 35.48671 - 0.5, Math.toRadians(90));
             finalScoreMid = new Pose2d(-43.134397, 25.48671, Math.toRadians(0));
         }
@@ -247,11 +246,10 @@ public class BasicAuto extends LinearOpMode {
             xMod = -1;
             yMod = -1;
             hMod = 180;
-            initialOnset = new Vector2d(-49, -50);
-            Vector2d     pixelScoreSetup = new Vector2d(48,12);
-            Vector2d     hangingDoorPrep = new Vector2d(-40,12);
-            Vector2d lineBack = new Vector2d(-40,38);
-            finalScoreLeft = new Pose2d(-25.134397+0.5, -35.48671, Math.toRadians(90));
+            Vector2d initialOnset = new Vector2d(-49, -50);
+            Pose2d     finalScoreLeft = new Pose2d(-25.134397, -35.48671, Math.toRadians(90));
+            Vector2d     pixelScoreSetup = new Vector2d(48,-12);
+            Vector2d     hangingDoorPrep = new Vector2d(-40,-12);
             finalScoreRight = new Pose2d(-26.134397 - 0.5, -35.48671 - 0.5, Math.toRadians(90));
             finalScoreMid = new Pose2d(-33.134397, -25.48671, Math.toRadians(0));
         }
