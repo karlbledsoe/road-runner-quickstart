@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -19,6 +20,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(preselectTeleOp = "BasicOpMode_Linear")
+@Disabled
 public class BasicAuto extends LinearOpMode {
     public ColorDetection.BlueDeterminationPipeline pipelineBlue;
     public ColorDetection.RedDeterminationPipeline pipelineRed;
@@ -195,7 +197,6 @@ public class BasicAuto extends LinearOpMode {
             finalScoreMid = new Pose2d(-43.134397, -25.48671, Math.toRadians(0));
         } else if (isBlue && !isFront) {
             telemetry.addData("BLUE", "BACK");
-
             telemetry.update();
             xMod = 1;
             hMod = 0;
@@ -206,7 +207,7 @@ public class BasicAuto extends LinearOpMode {
             hangingDoorPrep = new Vector2d(49 - 15, 35.48671 - 0.5);
             lineBack = new Vector2d(40 - 24, 38);
             finalScoreLeft = new Pose2d(25.134397 - 24, 35.48671, Math.toRadians(90));
-            finalScoreRight = new Pose2d(2.134397 + 4.5, 35.48671 - 0.5, Math.toRadians(90));
+            finalScoreRight = new Pose2d(2.134397, 35.48671 - 0.5, Math.toRadians(90));
             finalScoreMid = new Pose2d(14.134397, 35.48671 - 0.5, Math.toRadians(90));
             yMod = -1;
         } else if (!isBlue && !isFront) {
@@ -274,6 +275,12 @@ public class BasicAuto extends LinearOpMode {
                     .strafeToConstantHeading(pixelScoreSetup)
                     .build());
         } else if (randomizationPosition == 1) {
+            telemetry.addData("finalStartingPos",finalStartingPos);
+            telemetry.addData("Back Blue Right","");
+            telemetry.addData("initialOnset",initialOnset);
+            telemetry.addData("finalScoreRight",finalScoreRight);
+            telemetry.update();
+            waitEx(10000);
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(initialOnset, Math.toRadians(-90 * yMod))
                     .setReversed(true)
@@ -300,14 +307,15 @@ public class BasicAuto extends LinearOpMode {
 
         drive.updatePoseEstimate();
         Actions.runBlocking(drive.actionBuilder(drive.pose)
+                .strafeToLinearHeading(hangingDoorPrep, finalStartingPos.heading)
                 .strafeToLinearHeading(finalStartingPos.position, finalStartingPos.heading)
                 .build()
         );
         drive.updatePoseEstimate();
-        drive.intake.setPower(0.5);
-        waitEx(2000);
-        drive.intake.setPower(0);
-        drive.updatePoseEstimate();
+//        drive.intake.setPower(0.5);
+//        waitEx(2000);
+//        drive.intake.setPower(0);
+//        drive.updatePoseEstimate();
         if (!parkMiddle && !isFront) {
 //            Actions.runBlocking(drive.actionBuilder(drive.pose)
 //                    .strafeToLinearHeading(finalParking.position, finalStartingPos.heading)

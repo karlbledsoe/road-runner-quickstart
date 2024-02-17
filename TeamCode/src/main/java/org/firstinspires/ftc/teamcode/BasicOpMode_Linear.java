@@ -69,8 +69,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
     public static int planeOn = 1;
     public static double intakePower = 0.8;
-    public static double startingPosPlane = 0.55;
-    public static double firePlane = 0;
+    public static double startingPosPlane = 0;
+    public static double firePlane = 1;
     boolean planeFire = false;
     boolean backFront = false;
     boolean intakeChanged = false;
@@ -165,6 +165,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
 //                robot.leftSlide.setTargetPosition(slidesUp);
 //                robot.rightSlide.setTargetPosition(slidesUp);
                 robot.leftSlide.setPower(500);
+                robot.rightSlide.setPower(500);
+
                 robot.rightSlide.setTargetPosition(500);
 
             } else if (gamepad2.dpad_down) {
@@ -172,6 +174,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
 //                robot.rightSlide.setTargetPosition(slidesDown);
                 robot.leftSlide.setTargetPosition(-500);
                 robot.rightSlide.setTargetPosition(-500);
+                robot.leftSlide.setPower(-500);
+                robot.rightSlide.setPower(-500);
             } else {
 //                robot.leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                robot.rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
