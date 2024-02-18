@@ -9,22 +9,19 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
-        Vector2d initialOnset = new Vector2d(-49, -50);
-        Vector2d pixelScoreSetup = new Vector2d(48, -12);
-        Vector2d hangingDoorPrep = new Vector2d(-40, -12);
-        Vector2d lineBack = new Vector2d(-40, -38);
-        Pose2d finalScoreLeft = new Pose2d(-25.134397, -35.48671, Math.toRadians(-90));
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 15.375)
                 .setDimensions(16.375,15)
-                .setStartPose(new Pose2d(13, -59.666, Math.toRadians(-90)))
+                .setStartPose(new Pose2d(13*-1-24, -59.666, Math.toRadians(-90)))
 
                 .build();
         myBot.runAction(myBot.getDrive().actionBuilder(myBot.getPose())
-                .strafeToLinearHeading(new Vector2d(34, -50), Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(17*-1-24,-25), Math.toRadians(-90))
                 .setReversed(true)
-                .splineToConstantHeading(new Vector2d(5.5, -35), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(24*-1-24,-35), Math.toRadians(-90))
+                .lineToY(-30)
+                .lineToY(-35)
                 .build());
 
 

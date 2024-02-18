@@ -144,7 +144,6 @@ public class AutoBlueFrontSUPERSAFE extends LinearOpMode {
             drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(17*-1-24,25),Math.toRadians(90))
-                    .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
                     .splineToConstantHeading(new Vector2d(24*-1-24,35), Math.toRadians(90))
                     .lineToY(30)
@@ -159,7 +158,6 @@ public class AutoBlueFrontSUPERSAFE extends LinearOpMode {
             telemetry.update();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(17*-1-24,25),Math.toRadians(90))
-                    .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
                     .splineToConstantHeading(new Vector2d(5.5*-1-24, 35), Math.toRadians(0))
                     .build());
@@ -172,7 +170,6 @@ public class AutoBlueFrontSUPERSAFE extends LinearOpMode {
         } else {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(17*-1-24,25),Math.toRadians(90))
-                    .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
                     .splineToSplineHeading(new Pose2d(17*-1-24, 25, Math.toRadians(0)), Math.toRadians(190))
                     .lineToX(10*-1-24)
