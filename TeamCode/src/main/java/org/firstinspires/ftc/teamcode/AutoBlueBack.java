@@ -130,6 +130,7 @@ public class AutoBlueBack extends LinearOpMode {
         }
 
         waitForStart();
+        finalStartingPos = new Pose2d(13, 59.666, Math.toRadians(90));
 
         if (finalStartingPos.equals(new Pose2d(0, 0, 0))) {
             waitEx(100000);
@@ -143,7 +144,7 @@ public class AutoBlueBack extends LinearOpMode {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(34, 50), Math.toRadians(90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(27,35), Math.toRadians(90))
+                    .splineToConstantHeading(new Vector2d(24,35), Math.toRadians(90))
                     .lineToY(30)
                     .lineToY(35)
                     .build());
@@ -157,7 +158,7 @@ public class AutoBlueBack extends LinearOpMode {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(34, 50), Math.toRadians(90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(10.5, 34), Math.toRadians(0))
+                    .splineToConstantHeading(new Vector2d(5.5, 35), Math.toRadians(0))
                     .build());
             drive.updatePoseEstimate();
             drive.intake.setPower(0.5);
@@ -174,7 +175,7 @@ public class AutoBlueBack extends LinearOpMode {
                     .lineToX(17)
                     .build());
             drive.updatePoseEstimate();
-            drive.intake.setPower(0.5);
+            drive.intake.setPower(0.4);
             waitEx(2000);
             drive.intake.setPower(0);
             drive.updatePoseEstimate();

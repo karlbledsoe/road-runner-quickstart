@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(preselectTeleOp = "BasicOpMode_Linear")
-public class AutoRedFront extends LinearOpMode {
+public class AutoBlueFrontSUPERSAFE extends LinearOpMode {
     public ColorDetection.BlueDeterminationPipeline pipelineBlue;
     public ColorDetection.RedDeterminationPipeline pipelineRed;
     private ElapsedTime timer = new ElapsedTime();
@@ -111,8 +111,8 @@ public class AutoRedFront extends LinearOpMode {
         while (!isStarted() && !isStopRequested()) {
 
 
-            camera.setPipeline(pipelineRed);
-            placement = pipelineRed.getAnalysis();
+            camera.setPipeline(pipelineBlue);
+            placement = pipelineBlue.getAnalysis();
 
             telemetry.addData("Analysis", placement);
 
@@ -123,42 +123,45 @@ public class AutoRedFront extends LinearOpMode {
             sleep(50);
         }
 
-        if (placement == ColorDetection.RedDeterminationPipeline.TeamElementPosition.LEFT) {
-            randomizationPosition = 1;
-        } else if (placement == ColorDetection.RedDeterminationPipeline.TeamElementPosition.RIGHT) {
+        if (placement == ColorDetection.BlueDeterminationPipeline.TeamElementPosition.LEFT) {
             randomizationPosition = -1;
+        } else if (placement == ColorDetection.BlueDeterminationPipeline.TeamElementPosition.RIGHT) {
+            randomizationPosition = 1;
         }
 
         waitForStart();
-        finalStartingPos = new Pose2d(-13-24, -59.666, Math.toRadians(-90));
+        finalStartingPos = new Pose2d(13*-1-24, 59.666, Math.toRadians(90));
+
 
         if (finalStartingPos.equals(new Pose2d(0, 0, 0))) {
             waitEx(100000);
         }
+        finalStartingPos = new Pose2d(13*-1-24, 59.666, Math.toRadians(90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, finalStartingPos);
-
-        if (placement == ColorDetection.RedDeterminationPipeline.TeamElementPosition.RIGHT) {
+        //LEFT
+        if (randomizationPosition == -1) {
             drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(new Vector2d(34*-1-24, -50), Math.toRadians(-90))
+                    .strafeToLinearHeading(new Vector2d(17*-1-24,25),Math.toRadians(90))
+                    .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(24*-1-24,-35), Math.toRadians(-90))
-                    .lineToY(-30)
-                    .lineToY(-35)
+                    .splineToConstantHeading(new Vector2d(24*-1-24,35), Math.toRadians(90))
+                    .lineToY(30)
+                    .lineToY(35)
                     .build());
             drive.updatePoseEstimate();
             drive.intake.setPower(0.5);
             waitEx(2000);
             drive.intake.setPower(0);
             drive.updatePoseEstimate();
-        } else if (placement == ColorDetection.RedDeterminationPipeline.TeamElementPosition.LEFT) {
-            telemetry.addData("AHHNOO","");
+        } else if (randomizationPosition == 1) {
             telemetry.update();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(new Vector2d(34*-1-24, -50), Math.toRadians(-90))
+                    .strafeToLinearHeading(new Vector2d(17*-1-24,25),Math.toRadians(90))
+                    .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(5.5*-1-24, -35), Math.toRadians(0))
+                    .splineToConstantHeading(new Vector2d(5.5*-1-24, 35), Math.toRadians(0))
                     .build());
             drive.updatePoseEstimate();
             drive.intake.setPower(0.5);
@@ -168,9 +171,10 @@ public class AutoRedFront extends LinearOpMode {
             //CENTER
         } else {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(new Vector2d(34*-1-24, -50), Math.toRadians(-90))
+                    .strafeToLinearHeading(new Vector2d(17*-1-24,25),Math.toRadians(90))
+                    .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
-                    .splineToSplineHeading(new Pose2d(17*-1-24, -25, Math.toRadians(0)), Math.toRadians(190))
+                    .splineToSplineHeading(new Pose2d(17*-1-24, 25, Math.toRadians(0)), Math.toRadians(190))
                     .lineToX(10*-1-24)
                     .lineToX(17*-1-24)
                     .build());

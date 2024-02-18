@@ -63,7 +63,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
     GamepadEx leftBumper1 = new GamepadEx();
 
     public static double ssStartPosition = 0.22;
-    public static double ssScorePosition = 0.9;
+    public static double ssScorePosition = 0.8;
     public static int slidesUp = 100;
     public static int slidesDown = 0;
 

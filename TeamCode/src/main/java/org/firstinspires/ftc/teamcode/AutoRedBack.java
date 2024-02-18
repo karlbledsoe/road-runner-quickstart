@@ -143,7 +143,7 @@ public class AutoRedBack extends LinearOpMode {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(34, -50), Math.toRadians(-90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(27,-35), Math.toRadians(-90))
+                    .splineToConstantHeading(new Vector2d(24,-35), Math.toRadians(-90))
                     .lineToY(-30)
                     .lineToY(-35)
                     .build());
@@ -153,12 +153,12 @@ public class AutoRedBack extends LinearOpMode {
             drive.intake.setPower(0);
             drive.updatePoseEstimate();
         } else if (placement == ColorDetection.RedDeterminationPipeline.TeamElementPosition.LEFT) {
-
+            telemetry.addData("AHHNOO","");
+            telemetry.update();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-
                     .strafeToLinearHeading(new Vector2d(34, -50), Math.toRadians(-90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(10.5, -34), Math.toRadians(0))
+                    .splineToConstantHeading(new Vector2d(5.5, -35), Math.toRadians(0))
                     .build());
             drive.updatePoseEstimate();
             drive.intake.setPower(0.5);
@@ -175,7 +175,7 @@ public class AutoRedBack extends LinearOpMode {
                     .lineToX(17)
                     .build());
             drive.updatePoseEstimate();
-            drive.intake.setPower(0.5);
+            drive.intake.setPower(0.4);
             waitEx(2000);
             drive.intake.setPower(0);
             drive.updatePoseEstimate();

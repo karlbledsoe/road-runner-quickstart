@@ -18,16 +18,13 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 15.375)
                 .setDimensions(16.375,15)
-                .setStartPose(new Pose2d(-37, -59.666, Math.toRadians(-90)))
+                .setStartPose(new Pose2d(13, -59.666, Math.toRadians(-90)))
 
                 .build();
         myBot.runAction(myBot.getDrive().actionBuilder(myBot.getPose())
+                .strafeToLinearHeading(new Vector2d(34, -50), Math.toRadians(-90))
                 .setReversed(true)
-                .strafeToLinearHeading(initialOnset, Math.toRadians(-90))
-                .setReversed(true)
-                .splineToConstantHeading(finalScoreLeft.position, finalScoreLeft.heading.plus(Math.PI / -2))
-                .strafeToLinearHeading(hangingDoorPrep, Math.toRadians(0))
-                .strafeToConstantHeading(pixelScoreSetup)
+                .splineToConstantHeading(new Vector2d(5.5, -35), Math.toRadians(0))
                 .build());
 
 

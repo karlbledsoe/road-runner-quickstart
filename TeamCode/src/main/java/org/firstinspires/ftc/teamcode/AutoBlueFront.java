@@ -130,6 +130,8 @@ public class AutoBlueFront extends LinearOpMode {
         }
 
         waitForStart();
+        finalStartingPos = new Pose2d(13*-1-24, 59.666, Math.toRadians(90));
+
 
         if (finalStartingPos.equals(new Pose2d(0, 0, 0))) {
             waitEx(100000);
@@ -141,9 +143,9 @@ public class AutoBlueFront extends LinearOpMode {
         if (randomizationPosition == -1) {
             drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
-                    .strafeToLinearHeading(new Vector2d(-34-24, 50), Math.toRadians(90))
+                    .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(27*-1-24,35), Math.toRadians(90))
+                    .splineToConstantHeading(new Vector2d(24*-1-24,35), Math.toRadians(90))
                     .lineToY(30)
                     .lineToY(35)
                     .build());
@@ -157,7 +159,7 @@ public class AutoBlueFront extends LinearOpMode {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(34*-1-24, 50), Math.toRadians(90))
                     .setReversed(true)
-                    .splineToConstantHeading(new Vector2d(10.5*-1-24, 34), Math.toRadians(0))
+                    .splineToConstantHeading(new Vector2d(5.5*-1-24, 35), Math.toRadians(0))
                     .build());
             drive.updatePoseEstimate();
             drive.intake.setPower(0.5);
@@ -174,7 +176,7 @@ public class AutoBlueFront extends LinearOpMode {
                     .lineToX(17*-1-24)
                     .build());
             drive.updatePoseEstimate();
-            drive.intake.setPower(0.5);
+            drive.intake.setPower(0.4);
             waitEx(2000);
             drive.intake.setPower(0);
             drive.updatePoseEstimate();

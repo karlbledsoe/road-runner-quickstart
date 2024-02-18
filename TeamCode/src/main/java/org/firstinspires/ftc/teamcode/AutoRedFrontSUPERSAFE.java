@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(preselectTeleOp = "BasicOpMode_Linear")
-public class AutoRedFront extends LinearOpMode {
+public class AutoRedFrontSUPERSAFE extends LinearOpMode {
     public ColorDetection.BlueDeterminationPipeline pipelineBlue;
     public ColorDetection.RedDeterminationPipeline pipelineRed;
     private ElapsedTime timer = new ElapsedTime();
@@ -141,6 +141,7 @@ public class AutoRedFront extends LinearOpMode {
         if (placement == ColorDetection.RedDeterminationPipeline.TeamElementPosition.RIGHT) {
             drive.updatePoseEstimate();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
+                    .strafeToLinearHeading(new Vector2d(17*-1-24,-25), Math.toRadians(-90))
                     .strafeToLinearHeading(new Vector2d(34*-1-24, -50), Math.toRadians(-90))
                     .setReversed(true)
                     .splineToConstantHeading(new Vector2d(24*-1-24,-35), Math.toRadians(-90))
@@ -156,6 +157,7 @@ public class AutoRedFront extends LinearOpMode {
             telemetry.addData("AHHNOO","");
             telemetry.update();
             Actions.runBlocking(drive.actionBuilder(drive.pose)
+                    .strafeToLinearHeading(new Vector2d(17*-1-24,-25), Math.toRadians(-90))
                     .strafeToLinearHeading(new Vector2d(34*-1-24, -50), Math.toRadians(-90))
                     .setReversed(true)
                     .splineToConstantHeading(new Vector2d(5.5*-1-24, -35), Math.toRadians(0))
@@ -168,6 +170,7 @@ public class AutoRedFront extends LinearOpMode {
             //CENTER
         } else {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
+                    .strafeToLinearHeading(new Vector2d(17*-1-24,-25), Math.toRadians(-90))
                     .strafeToLinearHeading(new Vector2d(34*-1-24, -50), Math.toRadians(-90))
                     .setReversed(true)
                     .splineToSplineHeading(new Pose2d(17*-1-24, -25, Math.toRadians(0)), Math.toRadians(190))
