@@ -170,7 +170,7 @@ public class AutoRedFrontSUPERSAFE extends LinearOpMode {
             Actions.runBlocking(drive.actionBuilder(drive.pose)
                     .strafeToLinearHeading(new Vector2d(17*-1-24,-25), Math.toRadians(-90))
                     .setReversed(true)
-                    .splineToSplineHeading(new Pose2d(17*-1-24, -25, Math.toRadians(0)), Math.toRadians(190))
+                    .splineToSplineHeading(new Pose2d(17*-1-24-0.0005, -25, Math.toRadians(0)), Math.toRadians(190))
                     .lineToX(10*-1-24)
                     .lineToX(17*-1-24)
                     .build());
